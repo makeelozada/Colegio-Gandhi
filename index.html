@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Visor 3D</title>
+
+<style>
+body{
+margin:0;
+overflow:hidden;
+}
+</style>
+
+</head>
+
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+
+let scene = new THREE.Scene();
+
+let camera = new THREE.PerspectiveCamera(
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+1000
+);
+
+let renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+camera.position.z = 3;
+
+let light = new THREE.DirectionalLight(0xffffff,1);
+light.position.set(5,5,5);
+scene.add(light);
+
+let objeto;
+
+let loader = new THREE.GLTFLoader();
+
+loader.load("modelo.glb", function(gltf){
+
+objeto = gltf.scene;
+scene.add(objeto);
+
+});
+
+
+// CONTROL CON EL DEDO
+
+let controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableZoom = false;
+
+
+// GIROSCOPIO
+
+window.addEventListener("deviceorientation", function(event){
+
+if(objeto){
+
+objeto.rotation.y = event.gamma * Math.PI/180;
+objeto.rotation.x = event.beta * Math.PI/180;
+
+}
+
+});
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+controls.update();
+
+renderer.render(scene,camera);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
