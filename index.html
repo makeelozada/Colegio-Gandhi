@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Visor 3D</title>
+
+<style>
+body{
+margin:0;
+overflow:hidden;
+background:#eeeeee;
+}
+</style>
+
+</head>
+
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+
+let scene = new THREE.Scene();
+
+let camera = new THREE.PerspectiveCamera(
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+1000
+);
+
+let renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+camera.position.z = 3;
+
+
+/* LUCES */
+
+let light1 = new THREE.DirectionalLight(0xffffff,1);
+light1.position.set(5,5,5);
+scene.add(light1);
+
+let light2 = new THREE.AmbientLight(0xffffff,0.6);
+scene.add(light2);
+
+
+/* CONTROLES */
+
+let controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableZoom = true;
+
+
+/* CARGAR MODELO */
+
+let objeto;
+
+let loader = new THREE.GLTFLoader();
+
+loader.load(
+
+"modelo.glb",
+
+function(gltf){
+
+objeto = gltf.scene;
+scene.add(objeto);
+
+console.log("Modelo cargado correctamente");
+
+},
+
+function(xhr){
+
+console.log((xhr.loaded / xhr.total * 100) + "% cargado");
+
+},
+
+function(error){
+
+console.error("Error cargando el modelo", error);
+
+}
+
+);
+
+
+/* GIROSCOPIO */
+
+window.addEventListener("deviceorientation", function(event){
+
+if(objeto){
+
+objeto.rotation.y = event.gamma * Math.PI/180;
+objeto.rotation.x = event.beta * Math.PI/180;
+
+}
+
+});
+
+
+/* ANIMACION */
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+controls.update();
+
+renderer.render(scene,camera);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
