@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Visor 3D</title>
+
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+background:#0f0f0f;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+font-family:Arial, sans-serif;
+color:white;
+}
+
+model-viewer{
+width:100%;
+height:100%;
+}
+
+#info{
+position:absolute;
+top:15px;
+left:15px;
+background:rgba(0,0,0,0.55);
+padding:12px;
+border-radius:8px;
+font-size:14px;
+line-height:1.4;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="info">
+👆 Arrastra para girar<br>
+🔎 Zoom con dos dedos<br>
+📱 Presiona AR para verlo en tu mesa
+</div>
+
+<model-viewer
+
+src="modelo.glb"
+
+camera-controls
+touch-action="pan-y"
+
+auto-rotate
+rotation-per-second="30deg"
+
+ar
+ar-modes="webxr scene-viewer quick-look"
+
+shadow-intensity="1"
+
+environment-image="neutral"
+
+skybox-image="https://modelviewer.dev/shared-assets/environments/aircraft_workshop_01_1k.hdr"
+
+exposure="1"
+
+reveal="interaction"
+
+loading="lazy"
+
+interaction-prompt="auto"
+
+>
+
+</model-viewer>
+
+</body>
+</html>
